@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: guestbook
+spec:
+  selector:
+    matchLabels:
+      run: guestbook
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: guestbook
+    spec:
+      containers:
+      - name: guestbook
+        image: k8s.gcr.io/hpa-example
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            cpu: 500m
+          requests:
+            cpu: 200m
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: guestbook
+  labels:
+    run: guestbook
+spec:
+  ports:
+  - port: 80
+  selector:
+    run: guestbook
